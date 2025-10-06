@@ -61,8 +61,14 @@ We have enumerated Users Share and found user.txt
 <img width="608" height="113" alt="findusertxt" src="https://github.com/user-attachments/assets/4418333e-4d2f-44ef-952f-ddee2bc742a6" />
 
 
-Check for ASREPRoasting:
+Check for Kerberoasting:
 
 <img width="676" height="494" alt="4" src="https://github.com/user-attachments/assets/9344416e-d25e-4302-b22b-a45de35d4d00" />
+
+Crack the password hash offline:
+
+
+<img width="647" height="413" alt="hashcat" src="https://github.com/user-attachments/assets/ab0ef444-1299-4d69-a823-e6acec6686d5" />
+
 
 
