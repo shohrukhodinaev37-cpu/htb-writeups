@@ -40,6 +40,7 @@ $ cat Preferences/Groups/Groups.xml
 <img width="661" height="140" alt="rsss" src="https://github.com/user-attachments/assets/f40cd140-bc45-44a8-9020-1ca5699e7706" />
 
 Decrypt encrypted password:
+
 └─# gpp-decrypt edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ    
 GPPstillStandingStrong2k18
 
