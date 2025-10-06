@@ -9,7 +9,9 @@ Active is a Windows machine on Hack The Box that involves Active Directory explo
 ### Nmap Scan
 Nmap scan
 
+```bash
 $ sudo nmap 10.10.10.100 -T4 -A -open -p-
+
 
 <img width="634" height="615" alt="nmap" src="https://github.com/user-attachments/assets/7afb8d91-5a47-4c49-b07b-5df063a531d7" />
 
