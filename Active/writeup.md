@@ -25,6 +25,7 @@ Enumerate the Replication Share
 
 
 
+
 We've found very interesting file Group.xml.
 
 Why this is important
@@ -53,7 +54,8 @@ Confirm credentials:
 <img width="658" height="313" alt="3" src="https://github.com/user-attachments/assets/9742fe16-0ae3-408c-94b5-99754f2806ae" />
 
 
+We have enumerated Users Share and found user.txt
 
 
 
-
+<img width="608" height="113" alt="findusertxt" src="https://github.com/user-attachments/assets/4418333e-4d2f-44ef-952f-ddee2bc742a6" />
