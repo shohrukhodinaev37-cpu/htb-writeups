@@ -71,4 +71,10 @@ Crack the password hash offline:
 <img width="647" height="413" alt="hashcat" src="https://github.com/user-attachments/assets/ab0ef444-1299-4d69-a823-e6acec6686d5" />
 
 
+Connect as Administrator:
+
+<img width="687" height="288" alt="adminaccess" src="https://github.com/user-attachments/assets/e370f12b-c7a7-416e-a00a-fb7631c6f4c3" />
+
+
+
 
