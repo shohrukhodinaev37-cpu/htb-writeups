@@ -17,8 +17,8 @@ Let's enumerate SMB
 
 Enumerate the Replication Share
 
+<img width="661" height="140" alt="rsss" src="https://github.com/user-attachments/assets/dc78fadb-37d8-414b-bedd-8c0a1d28c86a" />
 
-<img width="647" height="167" alt="catgroupsxml" src="https://github.com/user-attachments/assets/18291917-74e8-4407-af09-eadb3c9a96ce" />
 
 
 We've found very interesting file Group.xml.
