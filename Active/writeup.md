@@ -63,6 +63,6 @@ We have enumerated Users Share and found user.txt
 
 Check for ASREPRoasting:
 
-<img width="675" height="487" alt="getuserSPNS" src="https://github.com/user-attachments/assets/acce883c-6279-4581-8ad5-b53b382807cc" />
+<img width="676" height="494" alt="4" src="https://github.com/user-attachments/assets/9344416e-d25e-4302-b22b-a45de35d4d00" />
 
 
