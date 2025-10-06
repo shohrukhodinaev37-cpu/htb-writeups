@@ -17,38 +17,7 @@ Let's enumerate SMB
 
 Enumerate the Replication Share
 
-$ tree active.htb/
-active.htb/
-├── DfsrPrivate
-│   ├── ConflictAndDeleted
-│   ├── Deleted
-│   └── Installing
-├── Policies
-│   ├── {31B2F340-016D-11D2-945F-00C04FB984F9}
-│   │   ├── GPT.INI
-│   │   ├── Group Policy
-│   │   │   └── GPE.INI
-│   │   ├── MACHINE
-│   │   │   ├── Microsoft
-│   │   │   │   └── Windows NT
-│   │   │   │       └── SecEdit
-│   │   │   │           └── GptTmpl.inf
-│   │   │   ├── Preferences
-│   │   │   │   └── Groups
-│   │   │   │       └── Groups.xml
-│   │   │   └── Registry.pol
-│   │   └── USER
-│   └── {6AC1786C-016F-11D2-945F-00C04fB984F9}
-│       ├── GPT.INI
-│       ├── MACHINE
-│       │   └── Microsoft
-│       │       └── Windows NT
-│       │           └── SecEdit
-│       │               └── GptTmpl.inf
-│       └── USER
-└── scripts
 
-22 directories, 7 files
 
 $ cat Preferences/Groups/Groups.xml
 <?xml version="1.0" encoding="utf-8"?>
