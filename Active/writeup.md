@@ -5,13 +5,16 @@ ACTIVE HTB
 
 Active is a Windows machine on Hack The Box that involves Active Directory exploitation. The main goal is to enumerate SMB shares, extract domain credentials, and escalate privileges to gain both user and root access. This box is useful for learning common AD misconfigurations and realistic attack techniques.
 
-
+## Reconnaissance
+### Nmap Scan
 Nmap scan
 
 $ sudo nmap 10.10.10.100 -T4 -A -open -p-
 
 <img width="634" height="615" alt="nmap" src="https://github.com/user-attachments/assets/7afb8d91-5a47-4c49-b07b-5df063a531d7" />
 
+
+### SMB Enumeration  
 Let's enumerate SMB
 └─# smbclient -L //10.10.10.100 -N      
 
@@ -40,6 +43,10 @@ $ cat Preferences/Groups/Groups.xml
 
 <img width="661" height="140" alt="rsss" src="https://github.com/user-attachments/assets/f40cd140-bc45-44a8-9020-1ca5699e7706" />
 
+
+## Initial Access
+### GPP Password Extraction
+
 Decrypt encrypted password:
 
 └─# gpp-decrypt edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ    
@@ -59,6 +66,9 @@ We have enumerated Users Share and found user.txt
 
 
 <img width="608" height="113" alt="findusertxt" src="https://github.com/user-attachments/assets/4418333e-4d2f-44ef-952f-ddee2bc742a6" />
+
+## Privilege Escalation  
+### Kerberoasting Attack
 
 
 Check for Kerberoasting:
