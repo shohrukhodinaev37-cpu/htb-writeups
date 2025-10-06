@@ -1,4 +1,6 @@
 ###ACTIVE HTB
+
+
 <img width="1033" height="221" alt="1" src="https://github.com/user-attachments/assets/063487f0-1bfa-4231-910f-05fdd6b1e55a" />
 
 
@@ -85,7 +87,8 @@ Crack the password hash offline:
 
 Connect as Administrator:
 
-![Uploading 5.png…]()
+<img width="658" height="262" alt="5" src="https://github.com/user-attachments/assets/8374e5f6-b48d-47e6-bdaa-7673a5e3631e" />
+
 
 
 
