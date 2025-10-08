@@ -20,6 +20,8 @@ $ sudo nmap 10.10.10.100 -T4 -A -open -p-
 
 ### SMB Enumeration  
 Let's enumerate SMB
+
+
 └─# smbclient -L //10.10.10.100 -N      
 
 
