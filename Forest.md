@@ -18,6 +18,10 @@ Start with Nmap full scan:
 nmap -sC -sV 10.10.11.161 -Pn
 ```
 
+<img width="851" height="476" alt="1" src="https://github.com/user-attachments/assets/735c0789-a0d2-47b3-89ad-fd7e6fa2776f" />
+
+
+
 The nmap scan result returned a ton of information, for example domain name is htb.local.Let's use open port 389(LDAP) to gather more information about domain:
 
 ```bash
