@@ -15,20 +15,22 @@ Forest is a classic Active Directory box that demonstrates common domain comprom
 Start with Nmap full scan:
 
 ```bash
-nmap -sC -sV 10.10.11.161 -Pn
+nmap -sC -sV 10.10.10.161 -Pn
 ```
+<img width="976" height="661" alt="forest(1)" src="https://github.com/user-attachments/assets/35a46c51-86a6-467d-8ec9-dfaec58264b3" />
 
-<img width="851" height="476" alt="1" src="https://github.com/user-attachments/assets/735c0789-a0d2-47b3-89ad-fd7e6fa2776f" />
+
 
 
 
 The nmap scan result returned a ton of information, for example domain name is htb.local.Let's use open port 389(LDAP) to gather more information about domain:
 
 ```bash
-enum4linux 10.10.11.161 | egrep "Account|Domain|Lockout|group"
+enum4linux 10.10.10.161 | egrep "Account|Domain|Lockout|group"
 ```
+<img width="1279" height="561" alt="forest(2)" src="https://github.com/user-attachments/assets/ca99fb17-395b-4c49-a038-1a5c03537cf6" />
 
-<img width="914" height="435" alt="2" src="https://github.com/user-attachments/assets/8b28bc59-deb9-40df-aba6-d2fb58bc7122" />
+
 
 **Key findings**
 - Discovered domain users and machine accounts (examples):  
@@ -69,7 +71,9 @@ As we can see the password for svc-alfresco it's s3rvice
 ### Initial Foothold
 As we can see we can use evil-winrm for svc-alfresco user
 
-<img width="867" height="249" alt="6" src="https://github.com/user-attachments/assets/e5157ee8-10c9-4a65-8935-d3c2fefcbc5a" />
+<img width="1275" height="209" alt="forest(3)" src="https://github.com/user-attachments/assets/75e07584-0dc6-4945-9444-15e417cb9054" />
+
+
 
 Let's get access using evil-winrm
 
@@ -200,8 +204,8 @@ impacket-secretsdump   htb.local/tonee:password123@10.10.11.161
 
 Next, we get Administrator hash and get access via evil-winrm:
 
+<img width="1121" height="583" alt="forest(4)" src="https://github.com/user-attachments/assets/bfb13ec4-f993-425c-99c4-43530bb93865" />
 
-<img width="807" height="413" alt="21" src="https://github.com/user-attachments/assets/9399e3fe-7c9b-4632-98b3-69f54051ebbc" />
 
 Now we control whole DC!
 
