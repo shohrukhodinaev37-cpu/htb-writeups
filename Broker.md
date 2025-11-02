@@ -1,4 +1,4 @@
-# Broker - HTB Labs Writep
+# Broker - HTB Labs Writeup
 
 **Machine:** Broker (Linux)
 
@@ -288,6 +288,19 @@ root@broker:~# cat root.txt
 4a46ae40a3*******************
 ```
 
+## Conclusion
 
+The **Broker** machine demonstrates a simple yet realistic attack chain often seen in enterprise environments.  
+It starts with **default credentials** on an exposed service, leading to **remote code execution** through a known vulnerability in Apache ActiveMQ (CVE-2023-46604).  
+After gaining initial access as `activemq`, privilege escalation was achieved due to a **sudo misconfiguration** allowing `nginx` to run as root.  
+
+This machine highlights three key security lessons:
+1. Never leave default credentials enabled.  
+2. Keep middleware software (like ActiveMQ) patched.  
+3. Always restrict and review `sudo` permissions.
+
+Finally, successful exploitation resulted in obtaining both `user.txt` and `root.txt` flags.
+
+⭐ If you found this writeup helpful — consider giving a star on GitHub!
 
 
