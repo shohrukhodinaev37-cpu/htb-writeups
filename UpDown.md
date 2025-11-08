@@ -44,6 +44,10 @@ It's simple web, where we can check site is up or down.If I check my machine IP 
 
 I only found `dev` directory, where I didn't see anything there,so I tried again, but this time I used `gobuster`
 
+```text
+gobuster dir -u http://10.10.11.177/dev -w /usr/share/wordlists/dirb/common.txt  -x php,txt,json
+```
+
 <img width="609" height="498" alt="4" src="https://github.com/user-attachments/assets/bdf5a955-b6e0-4664-8804-4a803ae926b8" />
 
 We see interesting directory `/.git`
@@ -53,6 +57,9 @@ We see interesting directory `/.git`
 
 To download all `.git` files on this machine I used [git-dumper](https://github.com/arthaud/git-dumper) tool.
 
+```text
+git-dumper http://siteisup.htb/.git /tmp/siteisup
+```
 
 <img width="839" height="617" alt="6" src="https://github.com/user-attachments/assets/5b39c94d-084c-4892-b49b-e386a4f7cfad" />
 
@@ -143,6 +150,11 @@ I've checked `.git` logs and figured out
 <img width="551" height="355" alt="9" src="https://github.com/user-attachments/assets/e6bf95ff-3ac9-4790-a6a9-b9d6f3657936" />
 
 That means we can open up our `dev.siteisup.htb` only with our `Header`, which showing in `.htaccess`.I just added `Special-Dev: only4dev`
+
+```text
+curl -I -H ”Special-Dev: only4dev“ http://dev.siteisup.htb/
+```
+
 
 <img width="917" height="575" alt="burp" src="https://github.com/user-attachments/assets/2fb6969e-337a-4499-92d2-cbe5f69d8b08" />
 
