@@ -458,7 +458,7 @@ developer@updown:~/tmp$ ls
 setup.py
 ```
 
-I set up netcat listener `nc -lvnp 4444' and got reverse back
+I set up netcat listener `nc -lvnp 4444` and got reverse back
 ```python
 nc -lvnp 4444
 listening on [any] 4444 ...
