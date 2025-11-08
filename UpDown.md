@@ -220,6 +220,7 @@ I uploaded our `uploads.jpeg`
 <img width="1021" height="370" alt="22" src="https://github.com/user-attachments/assets/8d0e2818-a9bc-432b-b252-a7124a1d4df4" />
 
 I copied the path of upload file and pasted on my `Burp Suite` with `phar://`
+PHAR archives store metadata which PHP may unserialize when opened via phar://
 
 <img width="932" height="518" alt="24" src="https://github.com/user-attachments/assets/5b75f290-432e-4522-b7e1-9aa5a2481ed9" />
 
