@@ -482,6 +482,9 @@ Now we are `root`
 ```python
 root@updown:~# cat root.txt
 cat root.txt
+
+
+⭐ If you found this writeup helpful — consider giving a star on GitHub!
 2bcb81598046c8e2***********
 ```
 
