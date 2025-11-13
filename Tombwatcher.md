@@ -835,4 +835,4 @@ evil-winrm PS C:\Users\Administrator\Desktop> type root.txt
 ```
 
 
-
+⭐ If you found this writeup helpful — consider giving a star on GitHub!
