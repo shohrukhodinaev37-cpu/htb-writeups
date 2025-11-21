@@ -43,7 +43,7 @@ Nmap done: 1 IP address (1 host up) scanned in 26.31 seconds
 10.10.11.230     cozyhosting.htb
 ```
 
-Now we can open up this website
+Now we can open up this website.
 
 
 
