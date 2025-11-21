@@ -479,11 +479,15 @@ And I got `root`
 
 <img width="554" height="68" alt="18" src="https://github.com/user-attachments/assets/a5472a1b-4cb7-43de-9757-392a3e278c7e" />
 
-Obtain `root.txt`
+Now I we got `root.txt`
 ```text
 # cat root.txt
 1e332bdbc8a96f62df4403d1402282c2
 ```
+
+⭐ If you found this writeup helpful — consider giving a star on GitHub!
+
+
 
 
 
