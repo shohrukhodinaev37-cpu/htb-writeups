@@ -122,7 +122,7 @@ I found different directories but when I try open `/error` directory, It shows m
 <img width="776" height="209" alt="5" src="https://github.com/user-attachments/assets/0b5a267d-8fd9-4916-b191-d310216a9cac" />
 
 
-I didn't find interesting from these finding directories.So I'll try use different list for `SprintBoot` [list](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/Programming-Language-Specific/Java-Spring-Boot.txt) is it
+I didn't find interesting from these finding directories.So I'll try use different list for `SprintBoot` [here](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/Programming-Language-Specific/Java-Spring-Boot.txt) 
 
 ```python
 ┌──(root㉿odinaev)-[/home/odinaev/Downloads]
@@ -231,6 +231,7 @@ I found very interesting directory `/actuator/mappings`
 📌 What is /actuator/mappings?
 
 /actuator/mappings is an endpoint in Spring Boot that shows a full map of the application’s routes. It lists:
+
 	•	all available controllers
 	•	their URL paths
 	•	the HTTP methods they use (GET, POST, etc.)
