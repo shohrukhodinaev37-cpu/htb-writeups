@@ -1,6 +1,7 @@
 # CozyHosting - HTB Labs Writeup
 
 **Machine:** CozyHosting (Linux)
+
 **Difficulty:** Easy
 
 
@@ -483,7 +484,7 @@ And I got `root`
 Now I we got `root.txt`
 ```text
 # cat root.txt
-1e332bdbc8a96f62df4403d1402282c2
+1e332bdbc8a96f***********
 ```
 
 ⭐ If you found this writeup helpful — consider giving a star on GitHub!
