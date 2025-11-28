@@ -10,7 +10,7 @@
 
 -**Target IP:** `10.10.11.72`
 
--**Goal:** Obtain Administrator access on the machine in a lab environment.
+-**Goal:** Obtain Administrator access on the machine in a lab environment
 
 -**Machine Info:** As is common in real life Windows pentests, you will start the TombWatcher box with credentials for the following account: `henry / H3nry_987TGV!`
 
