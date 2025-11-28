@@ -8,7 +8,7 @@
 <img width="1034" height="144" alt="110" src="https://github.com/user-attachments/assets/f9b5f15d-fce8-4de4-94bf-ba5f782a2e87" />
 
 
-Forest is a classic Active Directory box that demonstrates common domain compromise techniques.Then engagement follows a standard AD workflow: enumeration of LDAP/RPC/SMB services, user discovery, AS-REP roasting to recover credentials for non-preauth accounts, and privilege abuse of built-in AD groups to escalate to Domain Admin.This writeup documents commands, findings, and reasoning used at each step.Intended for educational purposes only -- this machine is retired.
+Forest is a classic Active Directory box that demonstrates common domain compromise techniques.Then engagement follows a standard AD workflow: enumeration of LDAP/RPC/SMB services, user discovery, AS-REP roasting to recover credentials for non-preauth accounts, and privilege abuse of built-in AD groups to escalate to Domain Admin.This writeup documents commands, findings, and reasoning used at each step.Intended for educational purposes only -- this machine is retired
 
 ## 1. Scanning
 
