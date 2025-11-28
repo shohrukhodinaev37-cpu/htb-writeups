@@ -8,7 +8,7 @@
 
 ## Background / Scope
 - **Target IP:** `10.10.11.41`
-- **Goal:** Obtain `user.txt` and `root.txt` (or Administrator) on the machine in a lab environment.
+- **Goal:** Obtain `user.txt` and `root.txt` (or Administrator) on the machine in a lab environment
 - **Machine Info:** As is common in Windows pentests, you will start the Certified box with credentials for the following account: Username: `judith.mader` Password: `judith09`
 
 ## Target enumeration (nmap)
