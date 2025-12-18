@@ -188,7 +188,7 @@ information_schema
 test
 ```
 
-It is!Let's check what databases are here
+Let's check what databases are here
 
 ```python
 PS C:\xampp\mysql\bin> .\mysql.exe -u "certificate_webapp_user" -p"cert!f!c@teDBPWD" -e "show databases;"
